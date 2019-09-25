@@ -1,0 +1,31 @@
+<aura:component controller="commentBoxTemplatesController">
+	<aura:registerEvent name="templateBodyRetrieved" type="c:commentBoxTemplateBody" />
+	
+	<aura:attribute name="folders" type="Folder[]" />
+	<aura:attribute name="emails" type="EmailTemplate[]" />
+	<aura:attribute name="folderSelected" type="boolean" />
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <h1 class="slds-page-header__title slds-m-right--small lds-truncate slds-align-left">
+		<ui:outputText value="Templates" />
+	</h1>
+
+    <lightning:select aura:id="folderOption" name="folderOption" label="Select a Folder" onchange="{!c.handleFolderSelection}">
+    	<option value="None">-None-</option>
+    	<aura:iteration items="{!v.folders}" var="fold">
+    		<option value="{!fold.Id}">{!fold.Name}</option>
+        </aura:iteration>
+    </lightning:select>
+
+	<aura:if isTrue="{!v.folderSelected}">
+	    <lightning:select aura:id="emailOption" name="emailOption" label="Select a Template" onchange="{!c.handleEmailSelection}">
+	    	<option value="None">-None-</option>
+	    	<aura:iteration items="{!v.emails}" var="mail">
+	    		<option value="{!mail.Id}">{!mail.Name}</option>
+	        </aura:iteration>
+	    </lightning:select>
+	</aura:if> 
+
+
+</aura:component>

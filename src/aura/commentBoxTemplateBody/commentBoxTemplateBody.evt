@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Fired when an email template is selected" >
+    <aura:attribute name="message" type="String"/>
+</aura:event>

@@ -1,0 +1,4 @@
+// Disconnect CometD when leaving page - this was in the oninit function on commentboxutility
+        //window.addEventListener('unload', function(event) {
+        //  helper.disconnectCometd(component);
+        //});

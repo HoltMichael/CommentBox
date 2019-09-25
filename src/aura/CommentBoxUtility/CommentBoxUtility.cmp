@@ -1,0 +1,42 @@
+<aura:component controller="NotificationController" implements="flexipage:availableForAllPageTypes">
+    <ltng:require scripts="{!$Resource.cometd}" afterScriptsLoaded="{!c.onCometdLoaded}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    
+    <aura:attribute name="hasAccess" type="boolean" />
+    <aura:attribute name="buttonLabel" type="String" />
+    <aura:attribute name="notifications" type="Object[]"/>
+    <aura:attribute name="isMuted" type="Boolean" default="false"/>        
+    <aura:attribute name="sessionId" type="String"/>
+    <aura:attribute name="cometd" type="Object"/>
+    <aura:attribute name="cometdSubscriptions" type="Object[]"/>
+    <aura:attribute name="commentArray" type="String" />
+    <aura:registerEvent name="toastEvent" type="force:showToast"/>
+	
+    <div class="slds-page-header" role="banner">
+        <aura:if isTrue="{!v.hasAccess}">
+            <h1 class="slds-page-header__title slds-m-right--small lds-truncate slds-align-left">
+                <ui:outputText value="CommentBox" />
+            </h1>
+            <br />
+            <lightning:button onclick="{!c.toggleConnection}" label="{!v.buttonLabel}"/>
+            <div class="slds-p-top_large">
+                <p class="slds-text-heading--label">History</p>
+                <ui:outputText value="{!!v.notifications}" />
+                <aura:iteration items="{!v.notifications}" var="note">
+                    <div class="slds-border_bottom">
+                        <ui:outputText value="{!note.time + '\n'}" />
+                        <ui:outputURL value="{!note.caseURL}" label="{!note.caseNumber + ': ' + note.message}" target="_self"/>
+                        <ui:outputText value="\n" />
+                    </div>
+                </aura:iteration>
+            </div>
+            <aura:set attribute="else">
+                <h1 class="slds-page-header__title slds-m-right--small lds-truncate slds-align-left">
+                Insufficient Access to CommentBox features
+                </h1>
+                <ui:outputText value="Please see your system administrator" />
+            </aura:set>
+        </aura:if>
+    </div>
+    
+</aura:component>

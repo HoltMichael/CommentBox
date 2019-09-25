@@ -1,0 +1,4 @@
+.THIS .checkboxAlign{
+  display: inline-block;
+  float: left;
+}

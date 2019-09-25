@@ -1,0 +1,87 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" 
+                access="global"
+                controller="CommentBoxController">
+
+    <aura:method name="initialiseFollowers" action="{!c.handleCaseFollowerUpdate}" description="Used to output the followers to the screen when the doInit method runs" />
+    <aura:attribute name="hasAccess" type="boolean" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="thisCase" type="Object" />
+    <aura:attribute name="disabled" type="boolean" default="false" />
+    <aura:attribute name="commentBoxExists" type="boolean" default="true" />
+    <aura:attribute name="followerEmailAddresses" type="String" />
+    <aura:attribute name="publicComment" type="boolean" />
+    <aura:attribute name="attachmentIds" type="String[]" />
+    <aura:attribute name="attachmentNames" type="String" />
+                    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="templateBodyRetrieved" event="c:commentBoxTemplateBody" action="{!c.handleTemplateBody}" includeFacets="true"/>
+    
+        <div class="slds-page-header" role="banner">
+            <aura:if isTrue="{!v.hasAccess}">
+        		<p class="slds-text-heading--label">{!v.thisCase.CaseNumber}</p>
+                <h1 class="slds-page-header__title slds-m-right--small lds-truncate slds-align-left">
+                	<ui:outputText value="{!v.thisCase.Subject}" />
+                </h1>
+                <br />
+
+                <ui:outputText value="{!v.thisCase.Contact.Name}" />
+                <div style="padding-bottom:10px">
+                    <ui:inputCheckbox label="Public" value="{!v.thisCase.CommentBox__Public__c}" aura:id="public" change="{!c.togglePublic}" />
+                </div>
+                <aura:if isTrue="{!v.publicComment}" >
+                    <lightning:input label="To Addresses " value="{!v.thisCase.CommentBox__To_Addresses__c}" onchange="{!c.validateEmail}" aura:id="to"/>
+            		<lightning:input label="CC Addresses " value="{!v.thisCase.CommentBox__CC_Addresses__c}" onchange="{!c.validateEmail}" aura:id="cc" />
+            		<lightning:input label="BCC Addresses " value="{!v.thisCase.CommentBox__BCC_Addresses__c}" onchange="{!c.validateEmail}" aura:id="bcc"/>
+                    <ui:inputCheckbox label="Email Case Followers" value="{!v.thisCase.CommentBox__Email_Case_Followers__c}" aura:id="followers" change="{!c.handleCaseFollowerUpdate}"/>
+                    <ui:outputText value="{!v.followerEmailAddresses}" />
+                    <br />
+                </aura:if>
+                <br />
+
+                <!--<ui:inputtextarea value="{!v.thisCase.CommentBox__Comment_Body__c}" aura:id="body"/>-->
+
+                <lightning:inputRichText value="{!v.thisCase.CommentBox__Comment_Body__c}" aura:id="body">
+                    <lightning:insertImageButton/>
+                </lightning:inputRichText>
+
+                <div>
+                    <ui:outputText value="{!v.attachmentNames}"/>
+                    <aura:if isTrue="{!(v.attachmentNames != '')}" >            
+                        <div>
+                            <ui:button
+                                       aura:id="removeAttachment"
+                                       buttonTitle="Remove"
+                                       label="Remove"
+                                       buttonType="submit" 
+                                       press="{!c.removeAttachments}" 
+                                       class="slds-m-top--medium" 
+                                       disabled="{!v.disabled}"/>
+                            </div>
+                    </aura:if>
+                </div>
+                
+                <div style="padding-top:20px">
+                    <lightning:fileUpload label="Attachments" recordId="{!v.recordId}" multiple="true" onuploadfinished="{!c.handleUploadFinished}" />
+                </div>
+
+                <div style="padding-top:20px">
+                    <c:commentBoxTemplates />
+                </div>
+                <ui:button 
+                           aura:id="send"
+                           buttonTitle="Send"
+                           label="Send"
+                           buttonType="submit" 
+                           press="{!c.handleSendMessage}" 
+                           class="slds-m-top--medium" 
+                           disabled="{!v.disabled}"/>
+                <aura:set attribute="else">
+                    <h1 class="slds-page-header__title slds-m-right--small lds-truncate slds-align-left">
+                    Insufficient Access to CommentBox features
+                    </h1>
+                    <ui:outputText value="Please see your system administrator" />
+                </aura:set>
+            </aura:if>
+    </div>
+    
+</aura:component>
