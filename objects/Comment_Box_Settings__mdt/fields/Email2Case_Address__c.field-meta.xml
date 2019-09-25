@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Email2Case_Address__c</fullName>
+    <description>The Email address used to route cases to Salesforce in Email-To-Case. Please note, only 1 address is currently supported</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <label>Email2Case Address</label>
+    <required>true</required>
+    <type>Email</type>
+    <unique>false</unique>
+</CustomField>
